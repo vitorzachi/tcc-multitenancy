@@ -37,7 +37,7 @@
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/hibernate-core-3.5.4-Final.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/hibernate-entitymanager-3.5.4-Final.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/hibernate-envers-3.5.4-Final.jar"/>
-	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/hibernate-jpa-2.0-api-1.0.0.Final.jar" sourcepath="/home/vitor/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.0.Final/hibernate-jpa-2.0-api-1.0.0.Final-sources.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/hibernate-tools-3.2.0.ga.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/itext-2.1.7.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/jasperreports-3.7.3.jar"/>
@@ -86,5 +86,6 @@
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/trugger-2.7.0.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/velocity-1.6.4.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/xml-apis-1.3.02.jar"/>
+	<classpathentry kind="lib" path="/media/Documentos_2/programacao/java/bibliotecas java/libs para persistencia java/lib/mysql-connector-java-5.1.6-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

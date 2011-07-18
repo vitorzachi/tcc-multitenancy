@@ -12,16 +12,14 @@ import br.edu.unoesc.tcc.context.TenantContext;
 
 public abstract class AbstractQueryProcessor implements QueryProcessor {
 
-	public Set<Class<? extends AbstractTenantModel>> getEntitiesInQuery(
-			String sql) {
+	public Set<Class<? extends AbstractTenantModel>> getEntitiesInQuery(String sql) {
 		return getMapModelAndAlias(sql).keySet();
 	}
 
 	public Set<QueryParameter> getParamsToAddInQuery(String sql) {
 		Set<QueryParameter> qryParams = new HashSet<QueryParameter>();
 		for (String aliasName : getMapModelAndAlias(sql).values()) {
-			qryParams.add(new QueryParameter(aliasName
-					+ QueryProcessor.TENANT_ID_FIELD,
+			qryParams.add(new QueryParameter(aliasName + QueryProcessor.TENANT_ID_FIELD,
 					QueryProcessor.PARAM_IDENTIFIER_NAME));
 		}
 		return qryParams;
@@ -35,8 +33,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 
 			// select e from Entidade e where e.field=:param
 			// add AND at end of query
-			if (hasWhereClause(sql)
-					&& !(hasOrderByClause(sql) || hasGroupByClause(sql))) {
+			if (hasWhereClause(sql) && !(hasOrderByClause(sql) || hasGroupByClause(sql))) {
 				sb.append(AND_CLAUSE);
 				for (int i = 0; i < qryParams.size(); i++) {
 					sb.append(qryParams.get(i).getParamName());
@@ -50,8 +47,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 			}
 			// select e from Entidade e
 			// add WHERE at end of query
-			if (!hasWhereClause(sql)
-					&& !(hasOrderByClause(sql) || hasGroupByClause(sql))) {
+			if (!hasWhereClause(sql) && !(hasOrderByClause(sql) || hasGroupByClause(sql))) {
 				sb.append(WHERE_CLAUSE);
 				for (int i = 0; i < qryParams.size(); i++) {
 					sb.append(qryParams.get(i).getParamName());
@@ -65,8 +61,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 			}
 			// select e from Entidade e order by e.field
 			// add WHERE before ORDER BY
-			if (!hasWhereClause(sql)
-					&& (hasOrderByClause(sql) || hasGroupByClause(sql))) {
+			if (!hasWhereClause(sql) && (hasOrderByClause(sql) || hasGroupByClause(sql))) {
 				int separator = 0;
 				if (hasOrderByClause(sql)) {
 					separator = positionOfOrderByClause(sql);
@@ -95,8 +90,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 
 			// select e from Entidade e where e.field=:param order by e.field
 			// add AND before ORDER BY
-			if (hasWhereClause(sql)
-					&& (hasOrderByClause(sql) || hasGroupByClause(sql))) {
+			if (hasWhereClause(sql) && (hasOrderByClause(sql) || hasGroupByClause(sql))) {
 				int separator = 0;
 				if (hasOrderByClause(sql)) {
 					separator = positionOfOrderByClause(sql);
@@ -127,31 +121,27 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 		}
 	}
 
-	public Map<Class<? extends AbstractTenantModel>, String> getMapModelAndAlias(
-			String sql) {
+	public Map<Class<? extends AbstractTenantModel>, String> getMapModelAndAlias(String sql) {
 		Map<Class<? extends AbstractTenantModel>, String> map = new HashMap<Class<? extends AbstractTenantModel>, String>();
 		List<String> queryWords = new ArrayList<String>();
 		sql = sql.substring(sql.indexOf(QueryProcessor.FROM_CLAUSE)
-				+ (QueryProcessor.FROM_CLAUSE.length() + 1));
+				+ (QueryProcessor.FROM_CLAUSE.trim().length() + 1));
 		String[] strSplit = sql.split("[ ,]");
 		for (String s : strSplit) {
-			if (!QueryUtils.isReservedWord(s) && !s.equals(" ")
-					&& !s.equals("")) {
+			if (!QueryUtils.isReservedWord(s) && !s.equals(" ") && !s.equals("")) {
 				queryWords.add(s);
 			}
 		}
 		for (int i = 0; i < queryWords.size(); i++) {
 			if (TenantContext.isEntityInContext(queryWords.get(i))) {
-				map.put(TenantContext.getEntityClass(queryWords.get(i)),
-						queryWords.get(i + 1));
+				map.put(TenantContext.getEntityClass(queryWords.get(i)), queryWords.get(i + 1));
 			}
 		}
 		return map;
 	}
 
 	protected boolean hasWhereClause(String sql) {
-		return sql.toLowerCase().contains(WHERE_CLAUSE)
-				|| sql.toUpperCase().contains(WHERE_CLAUSE);
+		return sql.toLowerCase().contains(WHERE_CLAUSE) || sql.toUpperCase().contains(WHERE_CLAUSE);
 	}
 
 	protected boolean hasOrderByClause(String sql) {
