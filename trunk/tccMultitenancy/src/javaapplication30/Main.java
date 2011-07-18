@@ -13,10 +13,6 @@ import br.edu.unoesc.tcc.context.TenantContext;
  */
 public class Main {
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
 	public static void main(String[] args) {
 
 		TenantContext.setUp("JavaApplication30PU", "javaapplication30");
@@ -30,8 +26,8 @@ public class Main {
 
 		TenantContext.setTenantOwner(e);
 
-		System.out.println(TenantContext.getEntityManager()
-				.createQuery("select e from Empresa e").getResultList());
+		System.out.println(TenantContext.getEntityManager().createQuery("select e from Empresa e")
+				.getResultList());
 
 		Cliente c = new Cliente();
 		c.setNome("clt");
@@ -40,8 +36,8 @@ public class Main {
 		TenantContext.getEntityManager().persist(c);
 		TenantContext.getEntityManager().getTransaction().commit();
 
-		System.out.println(TenantContext.getEntityManager()
-				.createQuery("select e from Cliente e").getResultList());
+		System.out.println(TenantContext.getEntityManager().createQuery("select e from Cliente e")
+				.getResultList());
 	}
 
 }

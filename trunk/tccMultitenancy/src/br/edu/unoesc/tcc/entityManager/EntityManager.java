@@ -83,11 +83,10 @@ public class EntityManager implements javax.persistence.EntityManager {
 	public Query createQuery(String string) {
 		QueryProcessor qryProc = new DefaultQueryProcessorImpl();
 
-		javax.persistence.Query qry = entityManager.createQuery(qryProc
-				.processQuery(string));
+		javax.persistence.Query qry = entityManager.createQuery(qryProc.processQuery(string));
 		if (qryProc.getMapModelAndAlias(string).size() > 0) {
-			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME,
-					TenantContext.getTenantOwner().getTenantId());
+			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantContext.getTenantOwner()
+					.getTenantId());
 		}
 		return qry;
 	}
@@ -148,8 +147,7 @@ public class EntityManager implements javax.persistence.EntityManager {
 	 * @param atm
 	 * @throws EntityManagerException
 	 */
-	private void persistTenantModel(AbstractTenantModel atm)
-			throws EntityManagerException {
+	private void persistTenantModel(AbstractTenantModel atm) throws EntityManagerException {
 		if (TenantContext.getTenantOwner() == null) {
 			throw new EntityManagerException(
 					"Could not find TenantOwner for this operation. TenantOwner is null.");
@@ -176,11 +174,11 @@ public class EntityManager implements javax.persistence.EntityManager {
 	public <T> TypedQuery<T> createQuery(String sql, Class<T> clazz) {
 		QueryProcessor qryProc = new DefaultQueryProcessorImpl();
 
-		javax.persistence.TypedQuery<T> qry = entityManager.createQuery(
-				qryProc.processQuery(sql), clazz);
+		javax.persistence.TypedQuery<T> qry = entityManager.createQuery(qryProc.processQuery(sql),
+				clazz);
 		if (qryProc.getMapModelAndAlias(sql).size() > 0) {
-			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME,
-					TenantContext.getTenantOwner().getTenantId());
+			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantContext.getTenantOwner()
+					.getTenantId());
 		}
 		return qry;
 	}
@@ -201,8 +199,7 @@ public class EntityManager implements javax.persistence.EntityManager {
 	}
 
 	@Override
-	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2,
-			Map<String, Object> arg3) {
+	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2, Map<String, Object> arg3) {
 		return entityManager.find(arg0, arg1, arg2, arg3);
 	}
 

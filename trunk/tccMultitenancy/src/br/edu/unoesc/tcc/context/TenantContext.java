@@ -34,13 +34,11 @@ public abstract class TenantContext {
 	 * 
 	 * @param persistenceUnitName
 	 */
-	public static void setUp(final String persistenceUnitName,
-			final String... modelPackageNames) {
+	public static void setUp(final String persistenceUnitName, final String... modelPackageNames) {
 		entityManager = createEntityManager(persistenceUnitName);
 		for (String modelPackageName : modelPackageNames) {
 			entities.addAll(ClassScan.findAll().annotatedWith(Entity.class)
-					.assignableTo(AbstractTenantModel.class).recursively()
-					.in(modelPackageName));
+					.assignableTo(AbstractTenantModel.class).recursively().in(modelPackageName));
 		}
 		isSetUp = true;
 	}
@@ -51,15 +49,12 @@ public abstract class TenantContext {
 	 * 
 	 * @param persistenceUnitName
 	 */
-	public static void setUp(
-			javax.persistence.EntityManager javaxEntityManager,
+	public static void setUp(javax.persistence.EntityManager javaxEntityManager,
 			final String... modelPackageNames) {
-		entityManager = new br.edu.unoesc.tcc.entityManager.EntityManager(
-				javaxEntityManager);
+		entityManager = new br.edu.unoesc.tcc.entityManager.EntityManager(javaxEntityManager);
 		for (String modelPackageName : modelPackageNames) {
 			entities.addAll(ClassScan.findAll().annotatedWith(Entity.class)
-					.assignableTo(AbstractTenantModel.class).recursively()
-					.in(modelPackageName));
+					.assignableTo(AbstractTenantModel.class).recursively().in(modelPackageName));
 		}
 		isSetUp = true;
 	}
@@ -73,8 +68,7 @@ public abstract class TenantContext {
 	public static void setUp(final String[] modelPackageNames) {
 		for (String modelPackageName : modelPackageNames) {
 			entities.addAll(ClassScan.findAll().annotatedWith(Entity.class)
-					.assignableTo(AbstractTenantModel.class).recursively()
-					.in(modelPackageName));
+					.assignableTo(AbstractTenantModel.class).recursively().in(modelPackageName));
 		}
 		isSetUp = true;
 	}
@@ -87,8 +81,7 @@ public abstract class TenantContext {
 	 */
 	private static br.edu.unoesc.tcc.entityManager.EntityManager createEntityManager(
 			final String persistenceUnitName) {
-		EntityManagerFactory emf = Persistence
-				.createEntityManagerFactory(persistenceUnitName);
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
 		javax.persistence.EntityManager em = emf.createEntityManager();
 		return new br.edu.unoesc.tcc.entityManager.EntityManager(em);
 	}
