@@ -15,6 +15,7 @@ import javax.persistence.Persistence;
 import net.sf.trugger.scan.ClassScan;
 import br.edu.unoesc.tcc.AbstractTenantModel;
 import br.edu.unoesc.tcc.TenantOwner;
+import br.edu.unoesc.tcc.context.impl.TenantHolder;
 import br.edu.unoesc.tcc.entityManager.EntityManager;
 import br.edu.unoesc.tcc.exceptions.TenantContextException;
 
@@ -25,7 +26,6 @@ import br.edu.unoesc.tcc.exceptions.TenantContextException;
 public abstract class TenantContext {
 
 	private static EntityManager entityManager;
-	private static TenantOwner tenantOwner;
 	private static Set<Class> entities = new HashSet<Class>();
 	private static Map<String, NamedQuery> mapNamedQueries = new HashMap<String, NamedQuery>();
 	private static boolean isSetUp = false;
@@ -105,12 +105,12 @@ public abstract class TenantContext {
 	 */
 	public static TenantOwner getTenantOwner() {
 		verifyIsSetUp();
-		return tenantOwner;
+		return TenantHolder.getTenantOwner();
 	}
 
 	public static void setTenantOwner(TenantOwner tenantOwner) {
 		verifyIsSetUp();
-		TenantContext.tenantOwner = tenantOwner;
+		TenantHolder.setTenantOwner(tenantOwner);
 	}
 
 	public static Set<Class> getEntities() {
