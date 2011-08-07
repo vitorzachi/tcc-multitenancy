@@ -1,12 +1,14 @@
 package br.edu.unoesc.tcc.context;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Persistence;
 
@@ -25,7 +27,7 @@ public abstract class TenantContext {
 	private static EntityManager entityManager;
 	private static TenantOwner tenantOwner;
 	private static Set<Class> entities = new HashSet<Class>();
-	private Map<Class, NamedQuery> mapNamedQueries;
+	private static Map<String, NamedQuery> mapNamedQueries = new HashMap<String, NamedQuery>();
 	private static boolean isSetUp = false;
 
 	/**
@@ -41,6 +43,7 @@ public abstract class TenantContext {
 					.assignableTo(AbstractTenantModel.class).recursively().in(modelPackageName));
 		}
 		isSetUp = true;
+		scanNamedQueries();
 	}
 
 	/**
@@ -57,6 +60,7 @@ public abstract class TenantContext {
 					.assignableTo(AbstractTenantModel.class).recursively().in(modelPackageName));
 		}
 		isSetUp = true;
+		scanNamedQueries();
 	}
 
 	/**
@@ -71,6 +75,7 @@ public abstract class TenantContext {
 					.assignableTo(AbstractTenantModel.class).recursively().in(modelPackageName));
 		}
 		isSetUp = true;
+		scanNamedQueries();
 	}
 
 	/**
@@ -163,5 +168,35 @@ public abstract class TenantContext {
 			throw new TenantContextException(
 					"TenantContext is not set up. Please set up the TenantContext.");
 		}
+	}
+
+	private static void addNamedQuery(String nome, NamedQuery namedQry) {
+		mapNamedQueries.put(nome, namedQry);
+	}
+
+	private static void bindNamedQueries(Class entityClass) {
+		if (entityClass.isAnnotationPresent(NamedQuery.class)) {
+			NamedQuery nq = (NamedQuery) entityClass.getAnnotation(NamedQuery.class);
+			addNamedQuery(nq.name(), nq);
+		}
+
+		if (entityClass.isAnnotationPresent(NamedQueries.class)) {
+			NamedQueries nqs = (NamedQueries) entityClass.getAnnotation(NamedQueries.class);
+			for (NamedQuery nm : nqs.value()) {
+				addNamedQuery(nm.name(), nm);
+			}
+		}
+	}
+
+	private static void scanNamedQueries() {
+		if (isSetUp()) {
+			for (Class cl : entities) {
+				bindNamedQueries(cl);
+			}
+		}
+	}
+
+	public static String getNamedQuery(String nome) {
+		return ((NamedQuery) mapNamedQueries.get(nome)).query();
 	}
 }
