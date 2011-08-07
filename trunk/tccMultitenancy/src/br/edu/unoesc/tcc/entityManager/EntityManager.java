@@ -32,6 +32,9 @@ public class EntityManager implements javax.persistence.EntityManager {
 		this.entityManager = entityManager;
 	}
 
+	public EntityManager() {
+	}
+
 	public void persist(Object o) {
 		resolvePersist(o);
 	}
@@ -92,7 +95,12 @@ public class EntityManager implements javax.persistence.EntityManager {
 	}
 
 	public Query createNamedQuery(String string) {
-		return entityManager.createNamedQuery(string);
+		String sql = TenantContext.getNamedQuery(string);
+		if (sql != null) {
+			return this.createQuery(sql);
+		} else {
+			return entityManager.createNamedQuery(string);
+		}
 	}
 
 	public Query createNativeQuery(String string) {
@@ -154,7 +162,7 @@ public class EntityManager implements javax.persistence.EntityManager {
 		}
 		if (TenantContext.getTenantOwner().getTenantId() == null) {
 			throw new EntityManagerException(
-					"Id of TenantOwner is required for persist a TenantModel. Id of TenantOwner is null.");
+					"\"Id\" of TenantOwner is required for persist a TenantModel. \"Id\" of TenantOwner is null.");
 		}
 		atm.setTenantId(TenantContext.getTenantOwner().getTenantId());
 		entityManager.persist(atm);
