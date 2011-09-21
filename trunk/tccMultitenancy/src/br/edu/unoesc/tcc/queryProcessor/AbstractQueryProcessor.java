@@ -19,7 +19,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 	public Set<QueryParameter> getParamsToAddInQuery(String sql) {
 		Set<QueryParameter> qryParams = new HashSet<QueryParameter>();
 		for (String aliasName : getMapModelAndAlias(sql).values()) {
-			qryParams.add(new QueryParameter(aliasName + QueryProcessor.TENANT_ID_FIELD,
+			qryParams.add(new DefaultQueryParameterImpl(aliasName + QueryProcessor.TENANT_ID_FIELD,
 					QueryProcessor.PARAM_IDENTIFIER_NAME));
 		}
 		return qryParams;
@@ -36,10 +36,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 			if (hasWhereClause(sql) && !(hasOrderByClause(sql) || hasGroupByClause(sql))) {
 				sb.append(AND_CLAUSE);
 				for (int i = 0; i < qryParams.size(); i++) {
-					sb.append(qryParams.get(i).getParamName());
-					sb.append(EQUALS_CLAUSE);
-					sb.append(PARAM_IDENTIFIER_SYMBOL);
-					sb.append(qryParams.get(i).getParamValue());
+					sb.append(qryParams.get(i).getWhereRestriction());
 					if (!(i == qryParams.size() - 1)) {
 						sb.append(AND_CLAUSE);
 					}
@@ -50,10 +47,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 			if (!hasWhereClause(sql) && !(hasOrderByClause(sql) || hasGroupByClause(sql))) {
 				sb.append(WHERE_CLAUSE);
 				for (int i = 0; i < qryParams.size(); i++) {
-					sb.append(qryParams.get(i).getParamName());
-					sb.append(EQUALS_CLAUSE);
-					sb.append(PARAM_IDENTIFIER_SYMBOL);
-					sb.append(qryParams.get(i).getParamValue());
+					sb.append(qryParams.get(i).getWhereRestriction());
 					if (!(i == qryParams.size() - 1)) {
 						sb.append(AND_CLAUSE);
 					}
@@ -77,10 +71,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 
 				sb.append(WHERE_CLAUSE);
 				for (int i = 0; i < qryParams.size(); i++) {
-					sb.append(qryParams.get(i).getParamName());
-					sb.append(EQUALS_CLAUSE);
-					sb.append(PARAM_IDENTIFIER_SYMBOL);
-					sb.append(qryParams.get(i).getParamValue());
+					sb.append(qryParams.get(i).getWhereRestriction());
 					if (!(i == qryParams.size() - 1)) {
 						sb.append(AND_CLAUSE);
 					}
@@ -105,10 +96,7 @@ public abstract class AbstractQueryProcessor implements QueryProcessor {
 
 				sb.append(AND_CLAUSE);
 				for (int i = 0; i < qryParams.size(); i++) {
-					sb.append(qryParams.get(i).getParamName());
-					sb.append(EQUALS_CLAUSE);
-					sb.append(PARAM_IDENTIFIER_SYMBOL);
-					sb.append(qryParams.get(i).getParamValue());
+					sb.append(qryParams.get(i).getWhereRestriction());
 					if (!(i == qryParams.size() - 1)) {
 						sb.append(AND_CLAUSE);
 					}

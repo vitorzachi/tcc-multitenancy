@@ -15,11 +15,14 @@ import javax.persistence.metamodel.Metamodel;
 
 import br.edu.unoesc.tcc.AbstractTenantModel;
 import br.edu.unoesc.tcc.context.TenantContext;
+import br.edu.unoesc.tcc.context.impl.TenantHolder;
 import br.edu.unoesc.tcc.exceptions.EntityManagerException;
 import br.edu.unoesc.tcc.queryProcessor.QueryProcessor;
 import br.edu.unoesc.tcc.queryProcessor.impl.DefaultQueryProcessorImpl;
 
 /**
+ * EntityManager sobrescrito e modificado para interceptar as query e injetar os
+ * parâmetros necessários.
  * 
  * @author vitor
  */
@@ -88,7 +91,7 @@ public class EntityManager implements javax.persistence.EntityManager {
 
 		javax.persistence.Query qry = entityManager.createQuery(qryProc.processQuery(string));
 		if (qryProc.getMapModelAndAlias(string).size() > 0) {
-			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantContext.getTenantOwner()
+			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantHolder.getTenantOwner()
 					.getTenantId());
 		}
 		return qry;
@@ -156,15 +159,15 @@ public class EntityManager implements javax.persistence.EntityManager {
 	 * @throws EntityManagerException
 	 */
 	private void persistTenantModel(AbstractTenantModel atm) throws EntityManagerException {
-		if (TenantContext.getTenantOwner() == null) {
+		if (TenantHolder.getTenantOwner() == null) {
 			throw new EntityManagerException(
 					"Could not find TenantOwner for this operation. TenantOwner is null.");
 		}
-		if (TenantContext.getTenantOwner().getTenantId() == null) {
+		if (TenantHolder.getTenantOwner().getTenantId() == null) {
 			throw new EntityManagerException(
 					"\"Id\" of TenantOwner is required for persist a TenantModel. \"Id\" of TenantOwner is null.");
 		}
-		atm.setTenantId(TenantContext.getTenantOwner().getTenantId());
+		atm.setTenantId(TenantHolder.getTenantOwner().getTenantId());
 		entityManager.persist(atm);
 	}
 
@@ -185,7 +188,7 @@ public class EntityManager implements javax.persistence.EntityManager {
 		javax.persistence.TypedQuery<T> qry = entityManager.createQuery(qryProc.processQuery(sql),
 				clazz);
 		if (qryProc.getMapModelAndAlias(sql).size() > 0) {
-			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantContext.getTenantOwner()
+			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantHolder.getTenantOwner()
 					.getTenantId());
 		}
 		return qry;

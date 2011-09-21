@@ -5,50 +5,55 @@
 
 package javaapplication30;
 
-import br.edu.unoesc.tcc.TenantOwner;
 import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import br.edu.unoesc.tcc.TenantOwner;
+
 /**
- *
+ * 
  * @author vitor
  */
 @Entity
-public class Empresa implements Serializable,TenantOwner{
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
-    private String nome;
+public class Empresa implements Serializable, TenantOwner {
 
-    public Long getId() {
-	return id;
-    }
+	private static final long serialVersionUID = -6379080267460359610L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	private String nome;
 
-    public String getNome() {
-	return nome;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setNome(String nome) {
-	this.nome = nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
 
+	public void setTenantId(Long l) {
+		setId(id);
+	}
 
-    public void setId(Long id) {
-	this.id = id;
-    }
+	public Long getTenantId() {
+		return getId();
+	}
 
-    public void setTenantId(Long l) {
-	setId(id);
-    }
+	@Override
+	public String toString() {
+		return this.getNome();
+	}
 
-    public Long getTenantId() {
-	return getId();
-    }
-
-    
 }
