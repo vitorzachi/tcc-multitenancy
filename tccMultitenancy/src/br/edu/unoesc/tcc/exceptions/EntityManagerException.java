@@ -11,4 +11,8 @@ public class EntityManagerException extends RuntimeException {
 	public EntityManagerException(String string) {
 		super(string);
 	}
+
+	public EntityManagerException(Exception e) {
+		super(e);
+	}
 }

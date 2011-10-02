@@ -19,6 +19,7 @@ import br.edu.unoesc.tcc.context.impl.TenantHolder;
 import br.edu.unoesc.tcc.exceptions.EntityManagerException;
 import br.edu.unoesc.tcc.queryProcessor.QueryProcessor;
 import br.edu.unoesc.tcc.queryProcessor.impl.DefaultQueryProcessorImpl;
+import br.edu.unoesc.tcc.reflectionUtils.CascadeIntrospector;
 
 /**
  * EntityManager sobrescrito e modificado para interceptar as query e injetar os
@@ -86,23 +87,22 @@ public class EntityManager implements javax.persistence.EntityManager {
 		return entityManager.contains(o);
 	}
 
-	public Query createQuery(String string) {
+	public Query createQuery(String stringSQL) {
 		QueryProcessor qryProc = new DefaultQueryProcessorImpl();
 
-		javax.persistence.Query qry = entityManager.createQuery(qryProc.processQuery(string));
-		if (qryProc.getMapModelAndAlias(string).size() > 0) {
-			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantHolder.getTenantOwner()
-					.getTenantId());
+		javax.persistence.Query qry = entityManager.createQuery(qryProc.processQuery(stringSQL));
+		if (qryProc.getMapModelAndAlias(stringSQL).size() > 0) {
+			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantHolder.getTenantOwner().getTenantId());
 		}
 		return qry;
 	}
 
-	public Query createNamedQuery(String string) {
-		String sql = TenantContext.getNamedQuery(string);
+	public Query createNamedQuery(String stringSQL) {
+		String sql = TenantContext.getNamedQuery(stringSQL);
 		if (sql != null) {
 			return this.createQuery(sql);
 		} else {
-			return entityManager.createNamedQuery(string);
+			return entityManager.createNamedQuery(stringSQL);
 		}
 	}
 
@@ -139,7 +139,7 @@ public class EntityManager implements javax.persistence.EntityManager {
 	}
 
 	/**
-	 * decide the strategy os persist an Object
+	 * decide the strategy to persist an Object
 	 * 
 	 * @param o
 	 * @throws EntityManagerException
@@ -160,15 +160,23 @@ public class EntityManager implements javax.persistence.EntityManager {
 	 */
 	private void persistTenantModel(AbstractTenantModel atm) throws EntityManagerException {
 		if (TenantHolder.getTenantOwner() == null) {
-			throw new EntityManagerException(
-					"Could not find TenantOwner for this operation. TenantOwner is null.");
+			throw new EntityManagerException("Could not find TenantOwner for this operation. TenantOwner is null.");
 		}
 		if (TenantHolder.getTenantOwner().getTenantId() == null) {
-			throw new EntityManagerException(
-					"\"Id\" of TenantOwner is required for persist a TenantModel. \"Id\" of TenantOwner is null.");
+			throw new EntityManagerException("\"Id\" of TenantOwner is required for persist a TenantModel. \"Id\" of TenantOwner is null.");
 		}
-		atm.setTenantId(TenantHolder.getTenantOwner().getTenantId());
+		Long codigo = TenantHolder.getTenantOwner().getTenantId();
+		atm.setTenantId(codigo);
+		introspect(atm, codigo);
 		entityManager.persist(atm);
+	}
+
+	private void introspect(AbstractTenantModel atm, Long codigo) {
+		try {
+			new CascadeIntrospector(atm, codigo).introspect();
+		} catch (Exception e) {
+			throw new EntityManagerException(e);
+		}
 	}
 
 	@Override
@@ -177,19 +185,17 @@ public class EntityManager implements javax.persistence.EntityManager {
 	}
 
 	@Override
-	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> arg0) {
-		return entityManager.createQuery(arg0);
+	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteria) {
+		return entityManager.createQuery(criteria);
 	}
 
 	@Override
 	public <T> TypedQuery<T> createQuery(String sql, Class<T> clazz) {
 		QueryProcessor qryProc = new DefaultQueryProcessorImpl();
 
-		javax.persistence.TypedQuery<T> qry = entityManager.createQuery(qryProc.processQuery(sql),
-				clazz);
+		javax.persistence.TypedQuery<T> qry = entityManager.createQuery(qryProc.processQuery(sql), clazz);
 		if (qryProc.getMapModelAndAlias(sql).size() > 0) {
-			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantHolder.getTenantOwner()
-					.getTenantId());
+			qry.setParameter(QueryProcessor.PARAM_IDENTIFIER_NAME, TenantHolder.getTenantOwner().getTenantId());
 		}
 		return qry;
 	}
