@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import br.edu.unoesc.tcc.TenantOwner;
+import br.edu.unoesc.alligator.TenantOwner;
 
 /**
  * 

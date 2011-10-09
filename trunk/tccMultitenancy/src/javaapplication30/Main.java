@@ -7,7 +7,7 @@ package javaapplication30;
 
 import java.util.ArrayList;
 
-import br.edu.unoesc.tcc.context.TenantContext;
+import br.edu.unoesc.alligator.context.TenantContext;
 
 /**
  * 
