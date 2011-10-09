@@ -3,8 +3,8 @@ package testes.reflection;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 
-import br.edu.unoesc.tcc.reflectionUtils.CascadeIntrospector;
-import br.edu.unoesc.tcc.reflectionUtils.ReflectionUtils;
+import br.edu.unoesc.alligator.reflectionUtils.CascadeIntrospector;
+import br.edu.unoesc.alligator.reflectionUtils.ReflectionUtils;
 
 public class TesteReflection {
 
