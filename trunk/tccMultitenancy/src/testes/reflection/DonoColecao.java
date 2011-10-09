@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import br.edu.unoesc.tcc.AbstractTenantModel;
+import br.edu.unoesc.alligator.AbstractTenantModel;
 
 public class DonoColecao extends AbstractTenantModel {
 
