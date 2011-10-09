@@ -87,5 +87,6 @@
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/velocity-1.6.4.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/xml-apis-1.3.02.jar"/>
 	<classpathentry kind="lib" path="/media/Documentos_2/programacao/java/bibliotecas java/libs para persistencia java/lib/mysql-connector-java-5.1.6-bin.jar"/>
+	<classpathentry kind="lib" path="/media/Documentos_2/MATERIAIS_FACULDADE/TCC/required_libs/servlet-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
